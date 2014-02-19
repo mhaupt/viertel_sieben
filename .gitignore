@@ -1,0 +1,3 @@
+.lock*
+# Ignore build generated files
+build
