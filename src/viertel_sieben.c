@@ -3,7 +3,7 @@
  * Version 2. You may review the terms of this license at
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Copyright (C) 2013, Michael Haupt <pebble at haupz dot de>
+ * Copyright (C) 2013, 2014, Michael Haupt <pebble at haupz dot de>
  *
  * All rights reserved.
  */
@@ -20,6 +20,11 @@
 //
 
 #include <pebble.h>
+
+//
+// Set this to 1 to enable Catholic features.
+//
+#define CATHBIT 1
 
 static Window *w;
 static TextLayer *t;
@@ -100,6 +105,13 @@ void tick(struct tm *tt, TimeUnits tu) {
         IS_FULL ? "" : "\n", T_POINTS_IN_TIME[pit], T_HOURS[dhr]);
 
     text_layer_set_text(t, time_string);
+
+#ifdef CATHBIT
+    // Angelus buzz
+    if (T_MIN == 0 && (T_HR == 6 || T_HR == 12 || T_HR == 18)) {
+        vibes_double_pulse();
+    }
+#endif
 }
 
 //
