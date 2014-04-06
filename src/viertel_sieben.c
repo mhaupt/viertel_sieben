@@ -64,7 +64,7 @@ const char *T_POINTS_IN_TIME[] = {
     "fünf vor halb",
     "halb",
     "fünf nach halb",
-    "zehn nach halb ",
+    "zehn nach halb",
     "dreiviertel",
     "zehn vor",
     "fünf vor"
@@ -188,7 +188,7 @@ void tick(struct tm *tt, TimeUnits tu) {
 
 #ifdef CATHBIT
 #define TEXT_HOUR_Y 120
-#define TEXT_HOUR_Y_EXTEND 30
+#define TEXT_HOUR_Y_EXTEND 40
 #endif
 
 void setup_text_layer(TextLayer *tl, const char *font_key, GTextAlignment text_align) {
