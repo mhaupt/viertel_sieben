@@ -181,14 +181,14 @@ void tick(struct tm *tt, TimeUnits tu) {
 //
 
 #define TEXT_X 2
-#define TEXT_X_EXTEND 140
+#define TEXT_X_EXTENT 140
 
 #define TEXT_TIME_Y 8
-#define TEXT_TIME_Y_EXTEND 90
+#define TEXT_TIME_Y_EXTENT 90
 
 #ifdef CATHBIT
 #define TEXT_HOUR_Y 135
-#define TEXT_HOUR_Y_EXTEND 32 
+#define TEXT_HOUR_Y_EXTENT 32 
 #endif
 
 void setup_text_layer(TextLayer *tl, const char *font_key, GTextAlignment text_align) {
@@ -205,12 +205,12 @@ void setup(void) {
 
     Layer *wl = window_get_root_layer(w);
 
-    text = text_layer_create(GRect(TEXT_X, TEXT_TIME_Y, TEXT_X_EXTEND, TEXT_TIME_Y_EXTEND));
+    text = text_layer_create(GRect(TEXT_X, TEXT_TIME_Y, TEXT_X_EXTENT, TEXT_TIME_Y_EXTENT));
     setup_text_layer(text, FONT_KEY_GOTHIC_28_BOLD, GTextAlignmentLeft);
     layer_add_child(wl, text_layer_get_layer(text));
 
 #ifdef CATHBIT
-    hour = text_layer_create(GRect(TEXT_X, TEXT_HOUR_Y, TEXT_X_EXTEND, TEXT_HOUR_Y_EXTEND));
+    hour = text_layer_create(GRect(TEXT_X, TEXT_HOUR_Y, TEXT_X_EXTENT, TEXT_HOUR_Y_EXTENT));
     setup_text_layer(hour, FONT_KEY_GOTHIC_24, GTextAlignmentRight);
     layer_add_child(wl, text_layer_get_layer(hour));
 #endif
