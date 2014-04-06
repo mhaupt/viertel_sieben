@@ -31,6 +31,7 @@ static TextLayer *text;
 
 #ifdef CATHBIT
 static TextLayer *hour;
+static TextLayer *day;
 #endif
 
 //
@@ -109,6 +110,16 @@ const int LITURGICAL_HOUR_ENDS[] = {
     MINUTE_OF_DAY(18, 59),
     MINUTE_OF_DAY(23, 59)
 };
+
+const char *T_DAYS[] = {
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag"
+};
 #endif
 
 //
@@ -128,12 +139,16 @@ int compare(int x) {
 
 #ifdef CATHBIT
 #define HOUR_STRING_LENGTH 16
+#define DAY_STRING_LENGTH 16
+
+#define T_DAY (tt->tm_wday)
 #endif
 
 void tick(struct tm *tt, TimeUnits tu) {
     static char time_string[TIME_STRING_LENGTH];
 #ifdef CATHBIT
     static char hour_string[HOUR_STRING_LENGTH];
+    static char day_string[DAY_STRING_LENGTH];
 #endif
     
     // determine point in time (0: full hour, 11: X:55)
@@ -173,6 +188,11 @@ void tick(struct tm *tt, TimeUnits tu) {
     snprintf(hour_string, HOUR_STRING_LENGTH, T_LITURGICAL_HOURS[liturgical_hour]);
 
     text_layer_set_text(hour, hour_string);
+
+    // set day (for now, only the day of week)
+    memset(day_string, 0, DAY_STRING_LENGTH);
+    snprintf(day_string, DAY_STRING_LENGTH, T_DAYS[T_DAY]);
+    text_layer_set_text(day, day_string);
 #endif
 }
 
@@ -187,6 +207,8 @@ void tick(struct tm *tt, TimeUnits tu) {
 #define TEXT_TIME_Y_EXTENT 90
 
 #ifdef CATHBIT
+#define TEXT_DAY_Y 100
+#define TEXT_DAY_Y_EXTENT 32
 #define TEXT_HOUR_Y 135
 #define TEXT_HOUR_Y_EXTENT 32 
 #endif
@@ -213,6 +235,10 @@ void setup(void) {
     hour = text_layer_create(GRect(TEXT_X, TEXT_HOUR_Y, TEXT_X_EXTENT, TEXT_HOUR_Y_EXTENT));
     setup_text_layer(hour, FONT_KEY_GOTHIC_24, GTextAlignmentRight);
     layer_add_child(wl, text_layer_get_layer(hour));
+
+    day = text_layer_create(GRect(TEXT_X, TEXT_DAY_Y, TEXT_X_EXTENT, TEXT_DAY_Y_EXTENT));
+    setup_text_layer(day, FONT_KEY_GOTHIC_24, GTextAlignmentRight);
+    layer_add_child(wl, text_layer_get_layer(day));
 #endif
 
     tick_timer_service_subscribe(MINUTE_UNIT, tick);
