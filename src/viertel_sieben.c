@@ -27,7 +27,7 @@
 #define CATHBIT 1
 
 static Window *w;
-static TextLayer *t;
+static TextLayer *text;
 
 //
 // text data
@@ -104,7 +104,7 @@ void tick(struct tm *tt, TimeUnits tu) {
     snprintf(time_string, TIME_STRING_LENGTH, "%s%s%s%s\n%s", IS_FULL ? "\n" : "", T_FUZZY[fuzzy],
         IS_FULL ? "" : "\n", T_POINTS_IN_TIME[pit], T_HOURS[dhr]);
 
-    text_layer_set_text(t, time_string);
+    text_layer_set_text(text, time_string);
 
 #ifdef CATHBIT
     // Angelus buzz
@@ -118,6 +118,18 @@ void tick(struct tm *tt, TimeUnits tu) {
 // setup, shutdown, and main
 //
 
+#define TEXT_X 2
+
+#define TEXT_TIME_X_EXTEND 142
+#define TEXT_TIME_Y 8
+#define TEXT_TIME_Y_EXTEND 100
+
+void setup_text_layer(TextLayer *tl, const char *font_key) {
+    text_layer_set_text_color(tl, GColorWhite);
+    text_layer_set_background_color(tl, GColorClear);
+    text_layer_set_font(tl, fonts_get_system_font(font_key));
+}
+
 void setup(void) {
     w = window_create();
     window_stack_push(w, true);
@@ -125,11 +137,9 @@ void setup(void) {
 
     Layer *wl = window_get_root_layer(w);
 
-    t = text_layer_create(GRect(2, 8, 142, 160));
-    text_layer_set_text_color(t, GColorWhite);
-    text_layer_set_background_color(t, GColorClear);
-    text_layer_set_font(t, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
-    layer_add_child(wl, text_layer_get_layer(t));
+    text = text_layer_create(GRect(TEXT_X, TEXT_TIME_Y, TEXT_TIME_X_EXTEND, TEXT_TIME_Y_EXTEND));
+    setup_text_layer(text, FONT_KEY_GOTHIC_28_BOLD);
+    layer_add_child(wl, text_layer_get_layer(text));
 
     tick_timer_service_subscribe(MINUTE_UNIT, tick);
 }
