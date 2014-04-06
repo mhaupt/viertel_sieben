@@ -184,11 +184,11 @@ void tick(struct tm *tt, TimeUnits tu) {
 #define TEXT_X_EXTEND 140
 
 #define TEXT_TIME_Y 8
-#define TEXT_TIME_Y_EXTEND 100
+#define TEXT_TIME_Y_EXTEND 90
 
 #ifdef CATHBIT
-#define TEXT_HOUR_Y 130
-#define TEXT_HOUR_Y_EXTEND 40
+#define TEXT_HOUR_Y 135
+#define TEXT_HOUR_Y_EXTEND 32 
 #endif
 
 void setup_text_layer(TextLayer *tl, const char *font_key, GTextAlignment text_align) {
@@ -211,7 +211,7 @@ void setup(void) {
 
 #ifdef CATHBIT
     hour = text_layer_create(GRect(TEXT_X, TEXT_HOUR_Y, TEXT_X_EXTEND, TEXT_HOUR_Y_EXTEND));
-    setup_text_layer(hour, FONT_KEY_GOTHIC_28, GTextAlignmentRight);
+    setup_text_layer(hour, FONT_KEY_GOTHIC_24, GTextAlignmentRight);
     layer_add_child(wl, text_layer_get_layer(hour));
 #endif
 
