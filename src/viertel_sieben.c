@@ -161,8 +161,8 @@ void tick(struct tm *tt, TimeUnits tu) {
     // determine the current liturgical hour
     int liturgical_hour = 0;
     int minute_of_day = MINUTE_OF_DAY(T_HR, T_MIN);
-    for (int i = 0; i < N_LITURGICAL_HOURS; ++i) {
-        if (LITURGICAL_HOUR_ENDS[i] > minute_of_day) {
+    while (liturgical_hour < N_LITURGICAL_HOURS) {
+        if (LITURGICAL_HOUR_ENDS[liturgical_hour] > minute_of_day) {
             break;
         }
         ++liturgical_hour;
