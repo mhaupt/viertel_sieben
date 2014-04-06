@@ -77,6 +77,8 @@ const char *T_FUZZY[] = {
 };
 
 #ifdef CATHBIT
+const int N_LITURGICAL_HOURS = 7;
+
 const char *T_LITURGICAL_HOURS[] = {
     "Matutin",
     "Laudes",
@@ -86,6 +88,26 @@ const char *T_LITURGICAL_HOURS[] = {
     "Vesper",
     "Komplet",
     "<Fehler>"
+};
+
+#define MINUTE_OF_DAY(H, M) ((H) * 60 + (M))
+
+// store the ends of liturgical hours in terms of minutes-of-day
+// Matutin 00:00 - 04:59
+// Laudes  05:00 - 08:29
+// Terz    08:30 - 10:29
+// Sext    10:30 - 13:29
+// Non     13:30 - 15:59
+// Vesper  16:00 - 18:59
+// Komplet 19:00 - 23:59
+const int LITURGICAL_HOUR_ENDS[] = {
+    MINUTE_OF_DAY(4, 59),
+    MINUTE_OF_DAY(8, 29),
+    MINUTE_OF_DAY(10, 29),
+    MINUTE_OF_DAY(13, 29),
+    MINUTE_OF_DAY(15, 59),
+    MINUTE_OF_DAY(18, 59),
+    MINUTE_OF_DAY(23, 59)
 };
 #endif
 
@@ -136,22 +158,14 @@ void tick(struct tm *tt, TimeUnits tu) {
         vibes_double_pulse();
     }
 
-    // determine the text for the current hour
-    int liturgical_hour = 7;
-    if (T_HR >= 0 && T_HR < 5) {
-        liturgical_hour = 0; // Matutin
-    } else if (T_HR >= 5 && T_HR <= 8 && T_MIN <= 29) {
-        liturgical_hour = 1; // Laudes
-    } else if (T_HR >= 8 && T_HR <= 10 && T_MIN <= 29) {
-        liturgical_hour = 2; // Terz
-    } else if (T_HR >= 10 && T_HR <= 13 && T_MIN <= 29) {
-        liturgical_hour = 3; // Sext
-    } else if (T_HR >= 13 && T_HR < 16) {
-        liturgical_hour = 4; // Non
-    } else if (T_HR >= 16 && T_HR < 19) {
-        liturgical_hour = 5; // Vesper
-    } else if (T_HR >= 19 && T_HR <= 23) {
-        liturgical_hour = 6; // Komplet
+    // determine the current liturgical hour
+    int liturgical_hour = 0;
+    int minute_of_day = MINUTE_OF_DAY(T_HR, T_MIN);
+    for (int i = 0; i < N_LITURGICAL_HOURS; ++i) {
+        if (LITURGICAL_HOUR_ENDS[i] > minute_of_day) {
+            break;
+        }
+        ++liturgical_hour;
     }
 
     // set string
