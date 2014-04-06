@@ -187,7 +187,7 @@ void tick(struct tm *tt, TimeUnits tu) {
 #define TEXT_TIME_Y_EXTEND 100
 
 #ifdef CATHBIT
-#define TEXT_HOUR_Y 120
+#define TEXT_HOUR_Y 130
 #define TEXT_HOUR_Y_EXTEND 40
 #endif
 
